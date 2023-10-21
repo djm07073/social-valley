@@ -6,7 +6,7 @@ import { Cron } from '@nestjs/schedule';
 export class UpdateBotController {
   constructor(private readonly updateBotService: UpdateBotService) {}
 
-  @Cron('*/10 * * * * *') //15분마다: */15 * * * *, 5초마다(아마 테스트용?): */5 * * * * *
+  @Cron('*/4 * * * * *') //15분마다: */15 * * * *, 5초마다(아마 테스트용?): */5 * * * * *
   eventListening() {
     this.updateBotService.eventListening();
   }

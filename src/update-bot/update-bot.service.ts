@@ -6,6 +6,12 @@ import {
   Chainleader__factory,
   Multicall__factory,
 } from 'src/typechain';
+type State = {
+  epoch: string;
+  buyPrice: string;
+  sellPrice: string;
+  sharesSupply: string;
+};
 
 function splitAndFormatHexString(
   hexString: string,
@@ -60,7 +66,7 @@ export class UpdateBotService {
     // 1. ChainLeader Contract Event Listening 해서 계정 상태가 변한 유저의 address들을 받아옴.
     const post_tech_events = await chainleader_arbi.queryFilter(
       chainleader_arbi.getEvent('ChangeAccount'),
-      arbi_blocktime - 15 * 240,
+      arbi_blocktime - 40 * 240,
       arbi_blocktime,
     );
 
@@ -71,30 +77,53 @@ export class UpdateBotService {
     // console.log(post_tech_accounts);
     const friend_tech_events = await chainleader_base.queryFilter(
       chainleader_base.getEvent('ChangeAccount'),
-      base_blocktime - 15 * 30,
+      base_blocktime - 40 * 300,
       base_blocktime,
     );
     const friend_tech_accounts = splitAndFormatHexString(
       friend_tech_events[0].args[2],
       64,
     );
+
+    const base_epoch = friend_tech_events[0].topics[1];
+
     const chainleaderInterface = Chainleader__factory.createInterface();
     const multicall_base_data = [];
-    friend_tech_accounts.forEach((account) => {
-      multicall_base_data.push(
-        chainleaderInterface.encodeFunctionData('lastAccountUpdate', [account]),
-      );
+    friend_tech_accounts.map((item) => {
+      const account = '0x' + item.substring(26);
+      multicall_base_data.push({
+        target: CONFIG.base.chainLeader,
+        callData: chainleaderInterface.encodeFunctionData('lastAccountUpdate', [
+          account,
+        ]),
+      });
     });
-    const baseAccounts =
-      await multicall_base.aggregate.staticCall(multicall_base_data);
 
-    const multicall_arbi_data = [];
-    friend_tech_accounts.forEach((account) => {
-      multicall_arbi_data.push(
-        chainleaderInterface.encodeFunctionData('lastAccountUpdate', [account]),
-      );
+    const baseData =
+      await multicall_base.aggregate.staticCall(multicall_base_data);
+    const states: State[] = [];
+    baseData.returnData.map((datas) => {
+      const split_datas = splitAndFormatHexString(datas, 64);
+
+      states.push({
+        epoch: base_epoch,
+        buyPrice: split_datas[0],
+        sellPrice: split_datas[1],
+        sharesSupply: split_datas[2],
+      });
     });
-    const arbiAccounts =
+    console.log('ipns에 올릴 정보:', states);
+    const multicall_arbi_data = [];
+    // post_tech_accounts.map((item) => {
+    //   const account = '0x' + item.substring(26);
+    //   multicall_arbi_data.push({
+    //     target: CONFIG.arbitrum.chainLeader,
+    //     callData: chainleaderInterface.encodeFunctionData('lastAccountUpdate', [
+    //       account,
+    //     ]),
+    //   });
+    // });
+    const arbiData =
       await multicall_arbi.aggregate.staticCall(multicall_arbi_data);
 
     // 3. 가져온 유저정보를 web3 storage에 저장
