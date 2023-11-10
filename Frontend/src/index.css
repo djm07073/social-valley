@@ -1,9 +1,9 @@
-@import url("https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Kanit:wght@200;300;400&display=swap');
 
 body {
   margin: 0;
   padding: 0;
-  font-family: "Kanit", sans-serif;
+  font-family: 'Kanit', sans-serif;
   overscroll-behavior: none;
   font-size: 1em;
 }
@@ -18,7 +18,7 @@ html,
 }
 
 :root {
-  --w3m-font-family: "Kanit" !important;
+  --w3m-font-family: 'Kanit' !important;
   --w3m-font-size-master: 10px !important;
   --wui-font-weight-regular: 400 !important;
   --wui-font-weight-medium: 400 !important;
@@ -42,7 +42,7 @@ html,
 
 .hexagon:before,
 .hexagon:after {
-  content: "";
+  content: '';
   position: absolute;
   left: 15px;
   width: 77.492px;
