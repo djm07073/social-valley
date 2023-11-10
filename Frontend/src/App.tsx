@@ -14,6 +14,7 @@ export default function App() {
   // check Social Site
   const [groupId, setGroupId] = useState('');
   const [checkChain, setCheckChain] = useState('');
+  const [icID, setIcID] = useState('');
 
   const router = createBrowserRouter([
     // {
@@ -26,12 +27,16 @@ export default function App() {
     },
     {
       path: '/connect-wallet',
-      element: <ConnectWallet />,
+      element: <ConnectWallet setIcID={setIcID} />,
     },
     {
       path: '/profile',
       element: (
-        <Profile setGroupId={setGroupId} setCheckChain={setCheckChain} />
+        <Profile
+          setGroupId={setGroupId}
+          setCheckChain={setCheckChain}
+          icID={icID}
+        />
       ),
     },
     {

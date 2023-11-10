@@ -8,6 +8,14 @@
       "dependencies": ["backend"],
       "type": "assets",
       "source": ["dist/"]
+    },
+    "assets": {
+      "dependencies": ["backend"],
+      "frontend": {
+        "entrypoint": "dist/index.html"
+      },
+      "source": ["dist/"],
+      "type": "assets"
     }
   },
   "defaults": {

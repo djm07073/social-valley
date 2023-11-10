@@ -6,24 +6,41 @@ import { IPNSCreateAndUpload } from '../filecoin/IPNSCreateAndUpload';
 import useMakeProfile from '../hooks/useMakeProfile';
 import { useEffect, useState } from 'react';
 import { N } from 'ethers';
-export default function ConnectWallet() {
+import lg_valley from '../assets/lg_valley.png';
+
+import { createClient } from '@connect2ic/core';
+import { defaultProviders } from '@connect2ic/core/providers';
+import {
+  ConnectButton,
+  ConnectDialog,
+  Connect2ICProvider,
+  useConnect,
+} from '@connect2ic/react';
+import '@connect2ic/core/style.css';
+interface ConnectWalletProps {
+  setIcID: (icId: string) => void;
+}
+
+export default function ConnectWallet({ setIcID }: ConnectWalletProps) {
   const [name, setName] = useState<string>('');
   const [profile, setProfile] = useState<string>('');
   const { isLoading, makeProfile, chain, switchNetwork, isMakeProfile } =
     useMakeProfile();
   const navigate = useNavigate();
-  const { address, isConnected } = useAccount();
+  // const { address, isConnected } = useAccount();
+  const { isConnected, principal } = useConnect();
+
   const handleConnect = async () => {
     if (chain?.id !== 8453) {
       switchNetwork?.(8453);
     }
-    if (address) {
-      const { nameBytesString, profileNameBytesString } =
-        await IPNSCreateAndUpload(address);
+    // if (address) {
+    //   const { nameBytesString, profileNameBytesString } =
+    //     await IPNSCreateAndUpload(address);
 
-      setName(nameBytesString);
-      setProfile(profileNameBytesString);
-    }
+    //   setName(nameBytesString);
+    //   setProfile(profileNameBytesString);
+    // }
   };
 
   useEffect(() => {
@@ -53,12 +70,12 @@ export default function ConnectWallet() {
       }}
     >
       <img
-        src={'../../public/assets/lg_valley.png'}
+        src={lg_valley}
         width={102}
         alt="valley"
         css={{ marginBottom: 78, marginTop: 100 }}
       />
-      {address ? (
+      {/* {address ? (
         isLoading ? (
           <div> Loading...</div>
         ) : (
@@ -86,7 +103,23 @@ export default function ConnectWallet() {
         //   Connect Wallet
         // </div>
         <w3m-button />
-      )}
+      )} */}
+
+      <div className="auth-section">
+        <ConnectButton
+          onConnect={() => {
+            // await handleConnect();
+            // console.log('transaction');
+            // console.log(name);
+            // console.log(profile);
+            // makeProfile({ args: [name, profile] });
+            console.log('Connect Successful!');
+            setIcID(principal);
+            navigate('/profile');
+          }}
+        />
+      </div>
+      <ConnectDialog dark={false} />
 
       <div
         css={{

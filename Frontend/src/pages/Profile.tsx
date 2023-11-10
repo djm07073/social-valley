@@ -11,18 +11,27 @@ import { CONFIG } from '../config/chainleader';
 import { ShowProfile } from '../filecoin/ShowProfile';
 import { Contract, JsonRpcApiProvider, JsonRpcProvider } from 'ethers';
 import { ValleyProfile } from '../components/ValleyProfile';
+import { createClient } from '@connect2ic/core';
+import { defaultProviders } from '@connect2ic/core/providers';
+import {
+  ConnectButton,
+  ConnectDialog,
+  Connect2ICProvider,
+  useConnect,
+} from '@connect2ic/react';
+import '@connect2ic/core/style.css';
 
 const selectValley = [
   {
-    img: '../../public/assets/img_valley_1.png',
+    img: './assets/img_valley_1.png',
     className: 'hexagon',
   },
   {
-    img: '../../public/assets/img_valley_2.png',
+    img: './assets/img_valley_2.png',
     className: 'hexagon hexagon-green',
   },
   {
-    img: '../../public/assets/img_valley_3.png',
+    img: './assets/img_valley_3.png',
     className: 'hexagon hexagon-aurora',
   },
 ];
@@ -32,10 +41,10 @@ interface ISocialImg {
 }
 
 const socialImg: ISocialImg = {
-  posttech: '../../public/assets/lg_posttech.png',
-  friendtech: '../../public/assets/lg_friendtech.png',
-  starsarena: '../../public/assets/lg_starsarena.png',
-  masknetwork: '../../public/assets/lg_masknetwork.png',
+  posttech: './assets/lg_posttech.png',
+  friendtech: './assets/lg_friendtech.png',
+  starsarena: './assets/lg_starsarena.png',
+  masknetwork: './assets/lg_masknetwork.png',
 };
 const provider = new JsonRpcProvider('https://base.llamarpc.com');
 const profile = new Contract(
@@ -66,10 +75,15 @@ const profile = new Contract(
 interface ProfileProps {
   setGroupId: (groupId: string) => void;
   setCheckChain: (checkChain: string) => void;
+  icID: string;
 }
-export default function Profile({ setGroupId, setCheckChain }: ProfileProps) {
+export default function Profile({
+  setGroupId,
+  setCheckChain,
+  icID,
+}: ProfileProps) {
   const navigate = useNavigate();
-  const { address, isConnected } = useAccount();
+  const { principal, isConnected } = useConnect();
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
   //TODO: valley_info_data : ipns1
@@ -84,7 +98,7 @@ export default function Profile({ setGroupId, setCheckChain }: ProfileProps) {
   const connectSocialArr = ['posttech', 'starsarena']; //TODO: mock data => ipns 쿼리로 대체
 
   useEffect(() => {
-    if (!isConnected) navigate('/connect-wallet');
+    // if (!isConnected) navigate('/connect-wallet');
 
     if (vely < -20) {
       setImgUrl(selectValley[0].img);
@@ -115,7 +129,7 @@ export default function Profile({ setGroupId, setCheckChain }: ProfileProps) {
   }
 
   const retreive_valley_info_data = async () => {
-    const valley_info_data = await ValleyProfile(address as string);
+    const valley_info_data = await ValleyProfile(principal as string);
     const res = await ShowProfile(valley_info_data as string);
     const parsedQT = res![0];
 
@@ -184,15 +198,15 @@ export default function Profile({ setGroupId, setCheckChain }: ProfileProps) {
             fontSize: '9pt',
             cursor: 'pointer',
           }}
-          onClick={() => window.navigator.clipboard.writeText(address!)}
+          onClick={() => window.navigator.clipboard.writeText(principal!)}
         >
           <div
             css={{ width: 84, textOverflow: 'ellipsis', overflow: 'hidden' }}
           >
-            {address}
+            {principal}
           </div>
           <img
-            src={process.env.PUBLIC_URL + '/assets/ic_copy.png'}
+            src={'/assets/ic_copy.png'}
             alt="copy"
             css={{
               width: '10px',
@@ -213,7 +227,7 @@ export default function Profile({ setGroupId, setCheckChain }: ProfileProps) {
       >
         <div className={clsName} css={{ marginTop: '70px' }}>
           <img
-            src={process.env.PUBLIC_URL + imgUrl}
+            src={imgUrl}
             alt="valley"
             css={{
               position: 'absolute',
@@ -297,7 +311,7 @@ export default function Profile({ setGroupId, setCheckChain }: ProfileProps) {
             }
           >
             <img
-              src={process.env.PUBLIC_URL + '/assets/ic_plus.png'}
+              src={'/assets/ic_plus.png'}
               alt="add"
               css={
                 checkSocial
