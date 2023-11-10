@@ -1,14 +1,14 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { useAccount } from "wagmi";
-import { useNavigate } from "react-router-dom";
-import { IPNSCreateAndUpload } from "../filecoin/IPNSCreateAndUpload";
-import useMakeProfile from "../hooks/useMakeProfile";
-import { useEffect, useState } from "react";
-import { N } from "ethers";
+import { css } from '@emotion/react';
+import { useAccount } from 'wagmi';
+import { useNavigate } from 'react-router-dom';
+import { IPNSCreateAndUpload } from '../filecoin/IPNSCreateAndUpload';
+import useMakeProfile from '../hooks/useMakeProfile';
+import { useEffect, useState } from 'react';
+import { N } from 'ethers';
 export default function ConnectWallet() {
-  const [name, setName] = useState<string>("");
-  const [profile, setProfile] = useState<string>("");
+  const [name, setName] = useState<string>('');
+  const [profile, setProfile] = useState<string>('');
   const { isLoading, makeProfile, chain, switchNetwork, isMakeProfile } =
     useMakeProfile();
   const navigate = useNavigate();
@@ -27,7 +27,7 @@ export default function ConnectWallet() {
   };
 
   useEffect(() => {
-    if (isConnected) navigate("/profile");
+    if (isConnected) navigate('/profile');
   }, []);
 
   const StyledButtonHexagon = css`
@@ -45,15 +45,15 @@ export default function ConnectWallet() {
   return (
     <div
       css={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100%",
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100%',
       }}
     >
       <img
-        src={process.env.PUBLIC_URL + "/assets/lg_valley.png"}
+        src={'../../public/assets/lg_valley.png'}
         width={102}
         alt="valley"
         css={{ marginBottom: 78, marginTop: 100 }}
@@ -65,11 +65,11 @@ export default function ConnectWallet() {
           <div
             onClick={async () => {
               await handleConnect();
-              console.log("transaction");
+              console.log('transaction');
               console.log(name);
               console.log(profile);
               makeProfile({ args: [name, profile] });
-              if (isConnected && isMakeProfile) navigate("/profile");
+              if (isConnected && isMakeProfile) navigate('/profile');
             }}
             css={StyledButtonHexagon}
           >
@@ -90,39 +90,39 @@ export default function ConnectWallet() {
 
       <div
         css={{
-          position: "relative",
+          position: 'relative',
           left: -112,
           bottom: 43,
-          borderTop: "24px solid white",
-          borderRight: "24px solid transparent",
+          borderTop: '24px solid white',
+          borderRight: '24px solid transparent',
         }}
       />
 
       <div
         css={{
-          position: "relative",
+          position: 'relative',
           right: -112,
           bottom: 67,
-          borderTop: "24px solid white",
-          borderLeft: "24px solid transparent",
+          borderTop: '24px solid white',
+          borderLeft: '24px solid transparent',
         }}
       />
       <div
         css={{
-          position: "relative",
+          position: 'relative',
           left: -112,
           bottom: 69,
-          borderBottom: "24px solid white",
-          borderRight: "24px solid transparent",
+          borderBottom: '24px solid white',
+          borderRight: '24px solid transparent',
         }}
       />
       <div
         css={{
-          position: "relative",
+          position: 'relative',
           right: -112,
           bottom: 93,
-          borderBottom: "24px solid white",
-          borderLeft: "24px solid transparent",
+          borderBottom: '24px solid white',
+          borderLeft: '24px solid transparent',
         }}
       />
     </div>
