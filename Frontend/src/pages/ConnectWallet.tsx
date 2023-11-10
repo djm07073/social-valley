@@ -108,11 +108,6 @@ export default function ConnectWallet({ setIcID }: ConnectWalletProps) {
       <div className="auth-section">
         <ConnectButton
           onConnect={() => {
-            // await handleConnect();
-            // console.log('transaction');
-            // console.log(name);
-            // console.log(profile);
-            makeProfile({ args: [name, profile] });
             console.log('Connect Successful!');
             setIcID(principal);
             navigate('/profile?canisterId=dccg7-xmaaa-aaaaa-qaamq-cai');
