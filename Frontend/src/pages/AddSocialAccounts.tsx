@@ -1,30 +1,35 @@
 /** @jsxImportSource @emotion/react */
-import { css } from "@emotion/react";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAccount, useNetwork, useSwitchNetwork } from "wagmi";
-import WalletAddress from "../components/WalletAddress";
-import InputId from "../components/InputId";
-import useConnect from "../hooks/useConnect";
-import { ShowProfile } from "../filecoin/ShowProfile";
-import { ValleyProfile } from "../components/ValleyProfile";
-import { ValleyIndex } from "../components/ValleyIndex";
-import * as Name from "w3name";
-import { UpdateIndex } from "../filecoin/UpdateIndex";
+import { css } from '@emotion/react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
+import WalletAddress from '../components/WalletAddress';
+import InputId from '../components/InputId';
+import useConnect from '../hooks/useConnect';
+import { ShowProfile } from '../filecoin/ShowProfile';
+import { ValleyProfile } from '../components/ValleyProfile';
+import { ValleyIndex } from '../components/ValleyIndex';
+import * as Name from 'w3name';
+import { UpdateIndex } from '../filecoin/UpdateIndex';
+import LGBack from '../assets/lg_back.png';
+import LGMask from '../assets/lg_masknetwork.png';
+import LGPost from '../assets/lg_posttech.png';
+import LGFriend from '../assets/lg_friendtech.png';
+import LGStars from '../assets/lg_starsarena.png';
 
-type SOCIAL_FI = "MASK" | "FRIEND" | "STAR" | "POST";
+type SOCIAL_FI = 'MASK' | 'FRIEND' | 'STAR' | 'POST';
 
 export default function AddSocialAccounts() {
   const navigate = useNavigate();
   const { base_addAccount, arbitrum_addAccount } = useConnect();
   const { address } = useAccount();
   const [isOrigin, setIsOrigin] = useState<boolean>(false);
-  const [origin, setOrigin] = useState<string>("");
+  const [origin, setOrigin] = useState<string>('');
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
-  const [groupId, setGroupId] = useState<string>("");
-  const [nextId, setNextId] = useState<string>("");
-  const [socialType, setSocialType] = useState<SOCIAL_FI>("MASK");
+  const [groupId, setGroupId] = useState<string>('');
+  const [nextId, setNextId] = useState<string>('');
+  const [socialType, setSocialType] = useState<SOCIAL_FI>('MASK');
   const [activeButton, setActiveButton] = useState<boolean>(false);
 
   let parsedQT: any;
@@ -38,13 +43,13 @@ export default function AddSocialAccounts() {
      * 3 = stars_arena
      */
     {
-      console.log("Updating Index...");
+      console.log('Updating Index...');
       await UpdateIndex(
         name,
         typeEnum,
         typeEnum == 1 ? nextId : groupId,
-        "",
-        ""
+        '',
+        '',
       );
     };
 
@@ -66,15 +71,15 @@ export default function AddSocialAccounts() {
     }
   }, [address]);
   const handleConnect = async () => {
-    if (socialType === "FRIEND" && chain?.id !== 8453) {
+    if (socialType === 'FRIEND' && chain?.id !== 8453) {
       switchNetwork?.(8453);
-    } else if (socialType === "POST" && chain?.id !== 42161) {
+    } else if (socialType === 'POST' && chain?.id !== 42161) {
       switchNetwork?.(42161);
     }
-    if (socialType === "FRIEND" && address) {
+    if (socialType === 'FRIEND' && address) {
       base_addAccount();
       addSocial(2);
-    } else if (socialType === "POST" && address) {
+    } else if (socialType === 'POST' && address) {
       arbitrum_addAccount();
       addSocial(1);
     }
@@ -117,17 +122,19 @@ export default function AddSocialAccounts() {
   return (
     <div
       css={{
-        padding: "20px 25px",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
+        padding: '20px 25px',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
       }}
     >
       <img
-        onClick={() => navigate("/profile")}
-        src={process.env.PUBLIC_URL + "/assets/lg_back.png"}
+        onClick={() =>
+          navigate('/profile?canisterId=dccg7-xmaaa-aaaaa-qaamq-cai')
+        }
+        src={LGBack}
         width={14}
-        css={{ cursor: "pointer" }}
+        css={{ cursor: 'pointer' }}
         alt=""
       />
       <div css={{ marginTop: 36, fontSize: 14, fontWeight: 500 }}>
@@ -136,65 +143,65 @@ export default function AddSocialAccounts() {
       <div css={SubTitle}>Select Social dApp</div>
       <div
         css={{
-          display: "flex",
-          flexDirection: "row",
-          alignItems: "center",
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
         }}
       >
         <img
-          onClick={() => setSocialType("MASK")}
-          src={process.env.PUBLIC_URL + "/assets/lg_masknetwork.png"}
-          width={socialType == "MASK" ? imgWidthSelected : imgWidth}
+          onClick={() => setSocialType('MASK')}
+          src={LGMask}
+          width={socialType == 'MASK' ? imgWidthSelected : imgWidth}
           alt="masknetwork"
           css={{
-            border: socialType == "MASK" ? "3px solid #338A46" : "none",
-            padding: socialType == "MASK" ? 1 : 0,
+            border: socialType == 'MASK' ? '3px solid #338A46' : 'none',
+            padding: socialType == 'MASK' ? 1 : 0,
             borderRadius: 30,
-            cursor: "pointer",
+            cursor: 'pointer',
           }}
         />
         <img
-          onClick={() => setSocialType("POST")}
-          src={process.env.PUBLIC_URL + "/assets/lg_posttech.png"}
-          width={socialType == "POST" ? imgWidthSelected : imgWidth}
+          onClick={() => setSocialType('POST')}
+          src={LGPost}
+          width={socialType == 'POST' ? imgWidthSelected : imgWidth}
           alt="posttech"
           css={{
-            border: socialType == "POST" ? "3px solid #338A46" : "none",
-            padding: socialType == "POST" ? 1 : 0,
+            border: socialType == 'POST' ? '3px solid #338A46' : 'none',
+            padding: socialType == 'POST' ? 1 : 0,
             borderRadius: 30,
             marginLeft: 9,
-            cursor: "pointer",
+            cursor: 'pointer',
           }}
         />
         <img
-          onClick={() => setSocialType("FRIEND")}
-          src={process.env.PUBLIC_URL + "/assets/lg_friendtech.png"}
-          width={socialType == "FRIEND" ? imgWidthSelected : imgWidth}
+          onClick={() => setSocialType('FRIEND')}
+          src={LGFriend}
+          width={socialType == 'FRIEND' ? imgWidthSelected : imgWidth}
           alt="friendtech"
           css={{
-            border: socialType == "FRIEND" ? "3px solid #338A46" : "none",
-            padding: socialType == "FRIEND" ? 1 : 0,
+            border: socialType == 'FRIEND' ? '3px solid #338A46' : 'none',
+            padding: socialType == 'FRIEND' ? 1 : 0,
             borderRadius: 30,
             marginLeft: 9,
-            cursor: "pointer",
+            cursor: 'pointer',
           }}
         />
         <img
-          onClick={() => setSocialType("STAR")}
-          src={process.env.PUBLIC_URL + "/assets/lg_starsarena.png"}
-          width={socialType == "STAR" ? imgWidthSelected : imgWidth}
+          onClick={() => setSocialType('STAR')}
+          src={LGStars}
+          width={socialType == 'STAR' ? imgWidthSelected : imgWidth}
           alt="starsarena"
           css={{
-            border: socialType == "STAR" ? "3px solid #338A46" : "none",
-            padding: socialType == "STAR" ? 1 : 0,
+            border: socialType == 'STAR' ? '3px solid #338A46' : 'none',
+            padding: socialType == 'STAR' ? 1 : 0,
             borderRadius: 30,
             marginLeft: 9,
-            cursor: "pointer",
+            cursor: 'pointer',
           }}
         />
       </div>
       <WalletAddress
-        hidden={socialType == "MASK" ? true : false}
+        hidden={socialType == 'MASK' ? true : false}
         socialType={socialType}
         address={address}
         SubTitle={SubTitle}
@@ -202,7 +209,7 @@ export default function AddSocialAccounts() {
         StyledButton={StyledButton}
         setActiveButton={setActiveButton}
       />
-      {socialType != "FRIEND" ? (
+      {socialType != 'FRIEND' ? (
         <InputId
           socialType={socialType}
           address={address}
@@ -224,7 +231,7 @@ export default function AddSocialAccounts() {
       ) : (
         <div
           onClick={handleConnect}
-          style={{ backgroundColor: "#DDDDDD" }}
+          style={{ backgroundColor: '#DDDDDD' }}
           css={StyledButton}
         >
           Connect

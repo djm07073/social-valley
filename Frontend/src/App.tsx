@@ -54,7 +54,11 @@ export default function App() {
     {
       path: '*',
       element: (
-        <Profile setGroupId={setGroupId} setCheckChain={setCheckChain} />
+        <Profile
+          setGroupId={setGroupId}
+          setCheckChain={setCheckChain}
+          icID={icID}
+        />
       ),
     },
   ]);

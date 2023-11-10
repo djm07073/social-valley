@@ -36,16 +36,16 @@ export default function ConnectWallet({ setIcID }: ConnectWalletProps) {
     }
     // if (address) {
     //   const { nameBytesString, profileNameBytesString } =
-    //     await IPNSCreateAndUpload(address);
+    await IPNSCreateAndUpload(principal);
 
     //   setName(nameBytesString);
     //   setProfile(profileNameBytesString);
     // }
   };
 
-  useEffect(() => {
-    if (isConnected) navigate('/profile');
-  }, []);
+  // useEffect(() => {
+  //   if (isConnected) navigate('/profile');
+  // }, []);
 
   const StyledButtonHexagon = css`
     width: 245px;
@@ -110,7 +110,7 @@ export default function ConnectWallet({ setIcID }: ConnectWalletProps) {
           onConnect={() => {
             console.log('Connect Successful!');
             setIcID(principal);
-            navigate('/profile');
+            navigate('/profile?canisterId=dccg7-xmaaa-aaaaa-qaamq-cai');
           }}
         />
       </div>
