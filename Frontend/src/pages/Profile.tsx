@@ -20,18 +20,25 @@ import {
   useConnect,
 } from '@connect2ic/react';
 import '@connect2ic/core/style.css';
+import ImgValley3 from '../assets/img_valley_3.png';
+import ImgValley1 from '../assets/img_valley_1.png';
+import ImgValley2 from '../assets/img_valley_2.png';
+import Postech from '../assets/lg_posttech.png';
+import Starsarena from '../assets/lg_starsarena.png';
+import ICPlus from '../assets/ic_plus.png';
+import ICCopy from '../assets/ic_copy.png';
 
 const selectValley = [
   {
-    img: './assets/img_valley_1.png',
+    img: ImgValley1,
     className: 'hexagon',
   },
   {
-    img: './assets/img_valley_2.png',
+    img: ImgValley2,
     className: 'hexagon hexagon-green',
   },
   {
-    img: './assets/img_valley_3.png',
+    img: ImgValley3,
     className: 'hexagon hexagon-aurora',
   },
 ];
@@ -41,10 +48,9 @@ interface ISocialImg {
 }
 
 const socialImg: ISocialImg = {
-  posttech: './assets/lg_posttech.png',
-  friendtech: './assets/lg_friendtech.png',
-  starsarena: './assets/lg_starsarena.png',
-  masknetwork: './assets/lg_masknetwork.png',
+  posttech: Postech,
+  starsarena: Starsarena,
+  icplus: ICPlus,
 };
 const provider = new JsonRpcProvider('https://base.llamarpc.com');
 const profile = new Contract(
@@ -83,7 +89,7 @@ export default function Profile({
   icID,
 }: ProfileProps) {
   const navigate = useNavigate();
-  const { principal, isConnected } = useConnect();
+  const { principal, isConnected, disconnect, isDisconnecting } = useConnect();
   const { chain } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
   //TODO: valley_info_data : ipns1
@@ -98,7 +104,15 @@ export default function Profile({
   const connectSocialArr = ['posttech', 'starsarena']; //TODO: mock data => ipns 쿼리로 대체
 
   useEffect(() => {
-    // if (!isConnected) navigate('/connect-wallet');
+    if (!isConnected) {
+      navigate('/connect-wallet');
+    }
+    // if (isDisconnecting) {
+    //   navigate('/connect-wallet');
+    // }
+    // if (icID.length < 5) {
+    //   navigate('/connect-wallet');
+    // }
 
     if (vely < -20) {
       setImgUrl(selectValley[0].img);
@@ -203,10 +217,10 @@ export default function Profile({
           <div
             css={{ width: 84, textOverflow: 'ellipsis', overflow: 'hidden' }}
           >
-            {principal}
+            {icID}
           </div>
           <img
-            src={'/assets/ic_copy.png'}
+            src={ICCopy}
             alt="copy"
             css={{
               width: '10px',
@@ -285,7 +299,11 @@ export default function Profile({
             </div>
           ))}
           <button
-            onClick={() => navigate('/add-social-accounts')}
+            onClick={() =>
+              navigate(
+                '/add-social-accounts?canisterId=dccg7-xmaaa-aaaaa-qaamq-cai',
+              )
+            }
             css={
               checkSocial
                 ? {
@@ -311,7 +329,7 @@ export default function Profile({
             }
           >
             <img
-              src={'/assets/ic_plus.png'}
+              src={ICPlus}
               alt="add"
               css={
                 checkSocial

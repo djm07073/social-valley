@@ -38,7 +38,7 @@ const root = ReactDOM.createRoot(
 
 const client = createClient({
   canisters: {},
-  providers: defaultProviders,
+  providers: defaultProviders as any,
   globalProviderConfig: {
     dev: import.meta.env.DEV,
   },
